@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MosaicoA4 — Transforme sua foto em pôster gigante!</title>
+<meta name="description" content="Divida qualquer foto em folhas A4 e monte um pôster gigante em casa. Sem gráfica, sem custo alto. App online, funciona no celular!"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#e94560;--dark:#0f0f13;--card:#1a1a2e;--text:#f0f0f0;--muted:#999;
+  --green:#27ae60;--blue:#1a6fc4;--purple:#7c3aed;
+}
+body{background:var(--dark);color:var(--text);font-family:system-ui,sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#0f0f18 0%,#1a0a20 50%,#0a1020 100%);padding:0 16px;text-align:center;position:relative;overflow:hidden;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(233,69,96,0.15) 0%,transparent 70%);pointer-events:none}
+.badge{display:inline-block;background:rgba(233,69,96,0.15);border:1.5px solid rgba(233,69,96,0.4);color:var(--red);padding:6px 18px;border-radius:20px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:24px}
+.hero h1{font-size:clamp(28px,6vw,56px);font-weight:900;line-height:1.1;margin-bottom:16px;max-width:700px}
+.hero h1 span{color:var(--red)}
+.hero p{font-size:clamp(15px,2.5vw,20px);color:#bbb;max-width:560px;line-height:1.6;margin-bottom:32px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:48px}
+.btn-main{background:linear-gradient(135deg,var(--red),#c62a47);color:#fff;border:none;padding:18px 36px;border-radius:14px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 30px rgba(233,69,96,0.4);transition:transform .15s,box-shadow .15s;display:inline-block}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(233,69,96,0.5)}
+.btn-sec{background:rgba(255,255,255,0.07);color:#fff;border:1.5px solid rgba(255,255,255,0.2);padding:18px 32px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;display:inline-block;transition:background .15s}
+.btn-sec:hover{background:rgba(255,255,255,0.12)}
+
+/* MOCKUP MOSAICO */
+.mockup-wrap{position:relative;margin-bottom:16px}
+.mosaic-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;max-width:320px;margin:0 auto;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.6)}
+.mosaic-cell{aspect-ratio:0.71;position:relative;overflow:hidden}
+.mosaic-cell img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.9)}
+.mosaic-cell .num{position:absolute;top:4px;left:4px;background:rgba(233,69,96,0.9);color:#fff;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px}
+.mosaic-cell .line-h{position:absolute;bottom:0;left:0;right:0;height:1.5px;background:rgba(255,0,0,0.6)}
+.mosaic-cell .line-v{position:absolute;top:0;right:0;bottom:0;width:1.5px;background:rgba(255,0,0,0.6)}
+.mosaic-colors{
+  --c1:#1f3a5f;--c2:#2a1f3f;--c3:#1f3a2a;
+  --c4:#3a2010;--c5:#1f2f3f;--c6:#2a2a10;
+  --c7:#1a2a3a;--c8:#2a1a2a;--c9:#1a2a1a;
+}
+
+/* SECTION */
+section{padding:80px 16px;max-width:900px;margin:0 auto}
+.sec-badge{display:inline-block;background:rgba(233,69,96,0.1);color:var(--red);border:1px solid rgba(233,69,96,0.3);padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.sec-title{font-size:clamp(22px,4vw,36px);font-weight:800;margin-bottom:12px;line-height:1.2}
+.sec-sub{font-size:16px;color:#999;max-width:580px;line-height:1.6;margin-bottom:40px}
+
+/* PROBLEMA */
+.prob-sec{background:linear-gradient(135deg,#12121f,#1a0a0f);padding:60px 16px;text-align:center}
+.prob-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;max-width:800px;margin:0 auto 40px}
+.prob-card{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:24px;text-align:center}
+.prob-icon{font-size:36px;margin-bottom:12px}
+.prob-card h3{font-size:15px;font-weight:700;margin-bottom:8px;color:#ddd}
+.prob-card p{font-size:13px;color:#777;line-height:1.5}
+.prob-arrow{font-size:32px;margin:20px 0;color:var(--red)}
+
+/* COMO FUNCIONA */
+.steps-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px}
+.step-card{background:var(--card);border:1.5px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 20px;text-align:center;position:relative}
+.step-num{width:44px;height:44px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;margin:0 auto 16px;color:#fff}
+.step-card h3{font-size:15px;font-weight:700;margin-bottom:8px}
+.step-card p{font-size:13px;color:#888;line-height:1.5}
+.step-arrow{font-size:24px;color:var(--red);align-self:center;text-align:center;display:none}
+
+/* TAMANHOS */
+.sizes-sec{background:linear-gradient(135deg,#0a0a18,#12121f);padding:60px 16px;text-align:center}
+.sizes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;max-width:800px;margin:0 auto}
+.size-card{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px 12px;transition:border-color .2s,transform .2s}
+.size-card:hover{border-color:var(--red);transform:translateY(-4px)}
+.size-grid-vis{display:grid;gap:3px;margin:0 auto 12px;width:fit-content}
+.size-sq{background:rgba(233,69,96,0.3);border:1px solid rgba(233,69,96,0.6);border-radius:2px}
+.size-card h3{font-size:15px;font-weight:800;color:#fff;margin-bottom:4px}
+.size-card p{font-size:12px;color:#888}
+.size-card .size-cm{font-size:13px;color:var(--red);font-weight:700;margin-top:4px}
+
+/* FEATURES */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.feat-card{background:var(--card);border:1.5px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;display:flex;gap:16px;align-items:flex-start;transition:border-color .2s}
+.feat-card:hover{border-color:rgba(233,69,96,0.3)}
+.feat-icon{font-size:28px;flex-shrink:0;margin-top:2px}
+.feat-card h3{font-size:15px;font-weight:700;margin-bottom:6px}
+.feat-card p{font-size:13px;color:#777;line-height:1.5}
+
+/* DEPOIMENTOS */
+.test-sec{background:linear-gradient(135deg,#0a1020,#12121f);padding:60px 16px;text-align:center}
+.test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;max-width:900px;margin:0 auto}
+.test-card{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;text-align:left}
+.stars{color:#f39c12;font-size:16px;margin-bottom:12px}
+.test-card p{font-size:14px;color:#ccc;line-height:1.6;margin-bottom:16px;font-style:italic}
+.test-author{display:flex;align-items:center;gap:10px}
+.avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0}
+.test-author div{font-size:13px;font-weight:700;color:#eee}
+.test-author span{font-size:11px;color:#777}
+
+/* PRECO */
+.price-sec{background:linear-gradient(135deg,#0f0f18,#1a0510);padding:80px 16px;text-align:center}
+.price-card{background:linear-gradient(135deg,#1a1a2e,#12102a);border:2px solid var(--red);border-radius:24px;padding:40px 32px;max-width:480px;margin:0 auto;position:relative;box-shadow:0 20px 60px rgba(233,69,96,0.2)}
+.price-badge{position:absolute;top:-16px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;padding:6px 24px;border-radius:20px;font-size:13px;font-weight:800;white-space:nowrap}
+.price-old{font-size:18px;color:#666;text-decoration:line-through;margin-bottom:4px}
+.price-main{font-size:clamp(48px,10vw,72px);font-weight:900;color:#fff;line-height:1}
+.price-main span{font-size:24px;vertical-align:top;margin-top:12px;display:inline-block;color:#ccc}
+.price-main em{font-size:20px;font-style:normal;color:#ccc}
+.price-sub{font-size:14px;color:#888;margin-top:8px;margin-bottom:28px}
+.price-list{text-align:left;margin-bottom:32px}
+.price-item{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;font-size:14px;color:#ccc}
+.price-item::before{content:'✅';flex-shrink:0}
+.price-guarantee{background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.3);border-radius:10px;padding:12px 16px;font-size:13px;color:#7defa7;margin-top:20px;display:flex;gap:8px;align-items:center}
+
+/* FAQ */
+.faq-item{border-bottom:1px solid rgba(255,255,255,0.08);padding:20px 0;cursor:pointer}
+.faq-q{display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:600;color:#eee}
+.faq-a{font-size:14px;color:#999;line-height:1.6;margin-top:12px;display:none}
+.faq-item.open .faq-a{display:block}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-icon{font-size:20px;color:var(--red);transition:transform .2s;flex-shrink:0}
+
+/* CTA FINAL */
+.cta-sec{background:linear-gradient(135deg,#1a0510,#0f0f18);padding:80px 16px;text-align:center}
+.cta-sec h2{font-size:clamp(24px,5vw,42px);font-weight:900;margin-bottom:16px}
+.cta-sec p{font-size:16px;color:#999;max-width:500px;margin:0 auto 32px}
+
+/* FOOTER */
+footer{background:#0a0a10;border-top:1px solid rgba(255,255,255,0.06);padding:24px 16px;text-align:center;font-size:13px;color:#555}
+footer a{color:#777}
+
+/* FLOATING BTN */
+.float-btn{position:fixed;bottom:24px;right:20px;background:linear-gradient(135deg,var(--red),#c62a47);color:#fff;border:none;padding:14px 22px;border-radius:50px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 6px 24px rgba(233,69,96,0.5);z-index:999;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 6px 24px rgba(233,69,96,0.5)}50%{box-shadow:0 6px 36px rgba(233,69,96,0.8)}}
+
+/* COUNTDOWN */
+.countdown{display:flex;gap:8px;justify-content:center;margin-bottom:24px}
+.cd-box{background:rgba(233,69,96,0.15);border:1px solid rgba(233,69,96,0.3);border-radius:10px;padding:10px 14px;min-width:64px}
+.cd-num{font-size:28px;font-weight:900;color:var(--red);line-height:1}
+.cd-lbl{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1px}
+
+@media(max-width:600px){
+  .hero{padding-top:60px;padding-bottom:40px;min-height:auto}
+  section{padding:50px 16px}
+  .steps-wrap{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- FLOATING CTA -->
+<button class="float-btn" onclick="document.getElementById('comprar').scrollIntoView({behavior:'smooth'})">
+  🧩 Quero Comprar — R$ 17,90
+</button>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="badge">🔥 Oferta de Lançamento</div>
+  <h1>Transforme qualquer foto em um <span>pôster gigante</span> para imprimir em casa!</h1>
+  <p>Divida sua foto favorita em várias folhas A4 e monte um painel enorme — sem pagar gráfica, sem instalar nada, direto no celular.</p>
+
+  <div class="hero-btns">
+    <button class="btn-main" onclick="document.getElementById('comprar').scrollIntoView({behavior:'smooth'})">
+      🛒 Quero o MosaicoA4 por R$ 17,90
+    </button>
+    <button class="btn-sec" onclick="window.open('https://prof-zarate.github.io/MosaicoA4/','_blank')">
+      👀 Ver demonstração grátis
+    </button>
+  </div>
+
+  <!-- Mosaico visual animado -->
+  <div class="mockup-wrap">
+    <div class="mosaic-grid">
+      <div class="mosaic-cell" style="background:linear-gradient(135deg,#1f3a5f,#2a5080)"><div class="num">1/9</div><div class="line-h"></div><div class="line-v"></div></div>
+      <div class="mosaic-cell" style="background:linear-gradient(135deg,#2a1f3f,#4a2a6a)"><div class="num">2/9</div><div class="line-h"></div><div class="line-v"></div></div>
+      <div class="mosaic-cell" style="background:linear-gradient(135deg,#1f3a2a,#2a6040)"><div class="num">3/9</div><div class="line-h"></div></div>
+      <div class="mosaic-cell" style="background:linear-gradient(135deg,#3a2010,#6a3a18)"><div class="num">4/9</div><div class="line-h"></div><div class="line-v"></div></div>
+      <div class="mosaic-cell" style="background:linear-gradient(135deg,#1f2f3f,#2a4a6a)"><div class="num">5/9</div><div class="line-h"></div><div class="line-v"></div></div>
+      <div class="mosaic-cell" style="background:linear-gradient(135deg,#2a2a10,#4a4a1a)"><div class="num">6/9</div><div class="line-h"></div></div>
+      <div class="mosaic-cell" style="background:linear-gradient(135deg,#1a2a3a,#2a4a6a)"><div class="num">7/9</div><div class="line-v"></div></div>
+      <div class="mosaic-cell" style="background:linear-gradient(135deg,#2a1a2a,#5a2a5a)"><div class="num">8/9</div><div class="line-v"></div></div>
+      <div class="mosaic-cell" style="background:linear-gradient(135deg,#1a2a1a,#2a5a2a)"><div class="num">9/9</div></div>
+    </div>
+    <p style="font-size:13px;color:#666;margin-top:12px">↑ 9 folhas A4 que formam um pôster de 63×89 cm</p>
+  </div>
+</div>
+
+<!-- ===== PROBLEMA ===== -->
+<div class="prob-sec">
+  <div style="max-width:800px;margin:0 auto;text-align:center">
+    <div class="sec-badge">O problema</div>
+    <h2 class="sec-title">Você já quis imprimir uma foto grande mas...</h2>
+    <div class="prob-grid" style="margin-top:32px">
+      <div class="prob-card">
+        <div class="prob-icon">💸</div>
+        <h3>Gráfica custa caro</h3>
+        <p>Um pôster grande em gráfica pode custar R$ 80, R$ 150 ou mais</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">🚗</div>
+        <h3>Longe de casa</h3>
+        <p>Nem todo mundo tem gráfica perto ou tempo para buscar o serviço</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">😩</div>
+        <h3>Impressora A4 limita</h3>
+        <p>Sua impressora só imprime A4 e você fica sem opção para fotos grandes</p>
+      </div>
+    </div>
+    <div class="prob-arrow">↓</div>
+    <h3 style="font-size:22px;font-weight:800;color:#fff;margin-bottom:8px">Com o MosaicoA4 você resolve tudo isso!</h3>
+    <p style="color:#888;font-size:15px">Divide a foto em folhas A4, imprime em casa e monta como quebra-cabeça 🧩</p>
+  </div>
+</div>
+
+<!-- ===== COMO FUNCIONA ===== -->
+<section style="text-align:center;max-width:900px">
+  <div class="sec-badge">Passo a passo</div>
+  <h2 class="sec-title">Como funciona em 4 passos simples</h2>
+  <div class="steps-wrap" style="margin-top:8px">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div style="font-size:32px;margin-bottom:12px">📸</div>
+      <h3>Escolha a foto</h3>
+      <p>Selecione qualquer foto do seu celular — JPG, PNG, qualquer tamanho</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div style="font-size:32px;margin-bottom:12px">⚙️</div>
+      <h3>Configure o tamanho</h3>
+      <p>Escolha 2×2, 3×3, 4×4 folhas ou personalizado. O app divide automaticamente</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div style="font-size:32px;margin-bottom:12px">📄</div>
+      <h3>Baixe o PDF</h3>
+      <p>Baixe um PDF com todas as folhas prontas para imprimir</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div style="font-size:32px;margin-bottom:12px">🧩</div>
+      <h3>Monte e exiba!</h3>
+      <p>Imprima, recorte e monte o pôster gigante seguindo a numeração</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TAMANHOS ===== -->
+<div class="sizes-sec">
+  <div class="sec-badge">Tamanhos disponíveis</div>
+  <h2 class="sec-title" style="margin-bottom:8px">Do pequeno ao gigante</h2>
+  <p style="color:#888;margin-bottom:36px;font-size:15px">Escolha quantas folhas A4 quer usar</p>
+  <div class="sizes-grid">
+    <div class="size-card">
+      <div class="size-grid-vis" style="grid-template-columns:1fr 1fr">
+        <div class="size-sq" style="width:28px;height:40px"></div><div class="size-sq" style="width:28px;height:40px"></div>
+      </div>
+      <h3>2 × 1</h3>
+      <p>2 folhas A4</p>
+      <div class="size-cm">~42 × 30 cm</div>
+    </div>
+    <div class="size-card">
+      <div class="size-grid-vis" style="grid-template-columns:1fr 1fr">
+        <div class="size-sq" style="width:28px;height:40px"></div><div class="size-sq" style="width:28px;height:40px"></div>
+        <div class="size-sq" style="width:28px;height:40px"></div><div class="size-sq" style="width:28px;height:40px"></div>
+      </div>
+      <h3>2 × 2</h3>
+      <p>4 folhas A4</p>
+      <div class="size-cm">~42 × 59 cm</div>
+    </div>
+    <div class="size-card">
+      <div class="size-grid-vis" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="size-sq" style="width:20px;height:28px"></div><div class="size-sq" style="width:20px;height:28px"></div><div class="size-sq" style="width:20px;height:28px"></div>
+        <div class="size-sq" style="width:20px;height:28px"></div><div class="size-sq" style="width:20px;height:28px"></div><div class="size-sq" style="width:20px;height:28px"></div>
+      </div>
+      <h3>3 × 2</h3>
+      <p>6 folhas A4</p>
+      <div class="size-cm">~63 × 59 cm</div>
+    </div>
+    <div class="size-card" style="border-color:rgba(233,69,96,0.4)">
+      <div class="size-grid-vis" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="size-sq" style="width:20px;height:28px;background:rgba(233,69,96,0.5)"></div><div class="size-sq" style="width:20px;height:28px;background:rgba(233,69,96,0.5)"></div><div class="size-sq" style="width:20px;height:28px;background:rgba(233,69,96,0.5)"></div>
+        <div class="size-sq" style="width:20px;height:28px;background:rgba(233,69,96,0.5)"></div><div class="size-sq" style="width:20px;height:28px;background:rgba(233,69,96,0.5)"></div><div class="size-sq" style="width:20px;height:28px;background:rgba(233,69,96,0.5)"></div>
+        <div class="size-sq" style="width:20px;height:28px;background:rgba(233,69,96,0.5)"></div><div class="size-sq" style="width:20px;height:28px;background:rgba(233,69,96,0.5)"></div><div class="size-sq" style="width:20px;height:28px;background:rgba(233,69,96,0.5)"></div>
+      </div>
+      <h3>3 × 3 ⭐</h3>
+      <p>9 folhas A4</p>
+      <div class="size-cm">~63 × 89 cm</div>
+    </div>
+    <div class="size-card">
+      <div class="size-grid-vis" style="grid-template-columns:1fr 1fr 1fr 1fr">
+        <div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div>
+        <div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div>
+        <div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div>
+      </div>
+      <h3>4 × 3</h3>
+      <p>12 folhas A4</p>
+      <div class="size-cm">~84 × 89 cm</div>
+    </div>
+    <div class="size-card">
+      <div class="size-grid-vis" style="grid-template-columns:1fr 1fr 1fr 1fr">
+        <div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div>
+        <div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div>
+        <div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div>
+        <div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div><div class="size-sq" style="width:15px;height:22px"></div>
+      </div>
+      <h3>4 × 4</h3>
+      <p>16 folhas A4</p>
+      <div class="size-cm">~84 × 118 cm</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FEATURES ===== -->
+<section style="max-width:900px">
+  <div style="text-align:center;margin-bottom:40px">
+    <div class="sec-badge">Recursos</div>
+    <h2 class="sec-title">Tudo que você precisa em um só app</h2>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card"><div class="feat-icon">✨</div><div><h3>Melhorador de imagem</h3><p>Melhore nitidez, brilho e contraste antes de imprimir para um resultado mais bonito</p></div></div>
+    <div class="feat-card"><div class="feat-icon">📄</div><div><h3>Exporta em PDF</h3><p>Todas as folhas em um único PDF organizado, pronto para enviar para qualquer impressora</p></div></div>
+    <div class="feat-card"><div class="feat-icon">📐</div><div><h3>Linhas de corte</h3><p>Linhas vermelhas indicam onde cortar e alinhar as folhas para montar perfeitamente</p></div></div>
+    <div class="feat-card"><div class="feat-icon">🔢</div><div><h3>Numeração automática</h3><p>Cada folha é numerada automaticamente para você montar na ordem certa sem confusão</p></div></div>
+    <div class="feat-card"><div class="feat-icon">📱</div><div><h3>Funciona no celular</h3><p>Android, iPhone, tablet ou computador — funciona em qualquer dispositivo com navegador</p></div></div>
+    <div class="feat-card"><div class="feat-icon">♾️</div><div><h3>Acesso vitalício</h3><p>Pague uma vez e use para sempre, com todas as atualizações futuras incluídas</p></div></div>
+    <div class="feat-card"><div class="feat-icon">🖼️</div><div><h3>3 modos de encaixe</h3><p>Preencher, caber tudo ou esticar — você escolhe como a foto ocupa o mosaico</p></div></div>
+    <div class="feat-card"><div class="feat-icon">⚡</div><div><h3>Rápido e simples</h3><p>Em menos de 2 minutos sua foto já está dividida e pronta para imprimir</p></div></div>
+  </div>
+</section>
+
+<!-- ===== DEPOIMENTOS ===== -->
+<div class="test-sec">
+  <div class="sec-badge">Depoimentos</div>
+  <h2 class="sec-title" style="margin-bottom:8px">O que estão falando</h2>
+  <p style="color:#888;margin-bottom:36px;font-size:15px">Veja a experiência de quem já usou</p>
+  <div class="test-grid">
+    <div class="test-card">
+      <div class="stars">★★★★★</div>
+      <p>"Fiz um pôster enorme da formatura do meu filho com 9 folhas A4. Ficou incrível na parede! Economizei mais de R$120 que pagaria na gráfica."</p>
+      <div class="test-author">
+        <div class="avatar" style="background:#e94560">M</div>
+        <div><div>Maria S.</div><span>São Paulo, SP</span></div>
+      </div>
+    </div>
+    <div class="test-card">
+      <div class="stars">★★★★★</div>
+      <p>"Usei para decorar a festa de aniversário do meu neto com foto dele gigante. Todo mundo perguntou onde eu fiz! Muito fácil de usar."</p>
+      <div class="test-author">
+        <div class="avatar" style="background:#1a6fc4">J</div>
+        <div><div>José R.</div><span>Belo Horizonte, MG</span></div>
+      </div>
+    </div>
+    <div class="test-card">
+      <div class="stars">★★★★★</div>
+      <p>"Criei um pôster do meu time favorito de 16 folhas! O resultado foi profissional demais. Recomendo para todo mundo que quer decorar sem gastar muito."</p>
+      <div class="test-author">
+        <div class="avatar" style="background:#27ae60">C</div>
+        <div><div>Carlos T.</div><span>Curitiba, PR</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PREÇO ===== -->
+<div class="price-sec" id="comprar">
+  <div class="sec-badge">Oferta especial</div>
+  <h2 class="sec-title" style="margin-bottom:8px">Garanta agora com desconto!</h2>
+
+  <!-- Countdown -->
+  <p style="color:#888;font-size:14px;margin-bottom:20px">Oferta termina em:</p>
+  <div class="countdown">
+    <div class="cd-box"><div class="cd-num" id="cd-h">02</div><div class="cd-lbl">horas</div></div>
+    <div class="cd-box"><div class="cd-num" id="cd-m">47</div><div class="cd-lbl">min</div></div>
+    <div class="cd-box"><div class="cd-num" id="cd-s">00</div><div class="cd-lbl">seg</div></div>
+  </div>
+
+  <div class="price-card">
+    <div class="price-badge">🔥 OFERTA DE LANÇAMENTO</div>
+    <div style="margin-top:20px">
+      <div class="price-old">De R$ 47,90</div>
+      <div class="price-main"><span>R$</span> 17<em>,90</em></div>
+      <div class="price-sub">pagamento único · acesso vitalício</div>
+    </div>
+    <div class="price-list">
+      <div class="price-item">Acesso ao app MosaicoA4 para sempre</div>
+      <div class="price-item">Todas as atualizações futuras grátis</div>
+      <div class="price-item">Exportação em PDF ilimitada</div>
+      <div class="price-item">Melhorador de imagem integrado</div>
+      <div class="price-item">Funciona no celular, tablet e PC</div>
+      <div class="price-item">Suporte por email incluído</div>
+    </div>
+    <button class="btn-main" style="width:100%;font-size:18px;padding:20px" onclick="alert('Redirecionar para link do Hotmart aqui!')">
+      🛒 QUERO COMPRAR AGORA
+    </button>
+    <div style="font-size:12px;color:#666;margin-top:12px">🔒 Pagamento 100% seguro via Hotmart</div>
+    <div class="price-guarantee">
+      🛡️ <span><strong>Garantia de 7 dias.</strong> Se não gostar, devolvemos 100% do seu dinheiro.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FAQ ===== -->
+<section style="max-width:700px">
+  <div style="text-align:center;margin-bottom:32px">
+    <div class="sec-badge">Dúvidas</div>
+    <h2 class="sec-title">Perguntas frequentes</h2>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Preciso instalar algum aplicativo? <span class="faq-icon">+</span></div>
+    <div class="faq-a">Não! O MosaicoA4 funciona direto no navegador do seu celular ou computador. Basta abrir o link e começar a usar. Nada para instalar.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Funciona no iPhone também? <span class="faq-icon">+</span></div>
+    <div class="faq-a">Sim! Funciona em qualquer celular, iPhone, Android, tablet ou computador. Tudo que precisa é de um navegador de internet (Chrome, Safari, Firefox).</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Que tipo de impressora preciso? <span class="faq-icon">+</span></div>
+    <div class="faq-a">Qualquer impressora que imprima em papel A4. Pode ser jato de tinta, laser, colorida ou preta e branca. Também pode levar o PDF em um pen drive para imprimir em gráfica barata.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Como recebo o acesso após comprar? <span class="faq-icon">+</span></div>
+    <div class="faq-a">Assim que o pagamento for confirmado, você recebe um email com o link de acesso ao app. O acesso é imediato e vitalício.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">E se eu não gostar? <span class="faq-icon">+</span></div>
+    <div class="faq-a">Você tem 7 dias de garantia total. Se por qualquer motivo não gostar, é só pedir o reembolso e devolvemos 100% do valor sem perguntas.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Quantas fotos posso fazer? <span class="faq-icon">+</span></div>
+    <div class="faq-a">Ilimitado! Após comprar você pode usar o app quantas vezes quiser, com quantas fotos quiser, para sempre.</div>
+  </div>
+</section>
+
+<!-- ===== CTA FINAL ===== -->
+<div class="cta-sec">
+  <h2>Pronto para criar seu <span style="color:var(--red)">pôster gigante</span>?</h2>
+  <p>Mais de uma foto especial merece estar na parede. Comece agora por apenas R$ 17,90.</p>
+  <button class="btn-main" style="font-size:18px;padding:20px 48px" onclick="alert('Redirecionar para link do Hotmart aqui!')">
+    🛒 Quero o MosaicoA4 Agora!
+  </button>
+  <p style="font-size:13px;color:#555;margin-top:16px">🔒 Pagamento seguro · 🛡️ Garantia de 7 dias · ♾️ Acesso vitalício</p>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p style="margin-bottom:8px">© 2025 MosaicoA4 · Todos os direitos reservados</p>
+  <p><a href="#">Política de Privacidade</a> · <a href="#">Termos de Uso</a> · <a href="mailto:contato@mosaicoa4.com">Contato</a></p>
+</footer>
+
+<script>
+// Countdown timer
+let total = 2*3600 + 47*60;
+function tick(){
+  if(total<=0) return;
+  total--;
+  const h=Math.floor(total/3600);
+  const m=Math.floor((total%3600)/60);
+  const s=total%60;
+  document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
+}
+setInterval(tick,1000);
+
+// Smooth scroll
+document.querySelectorAll('button').forEach(b=>{
+  b.addEventListener('click',function(){
+    if(this.getAttribute('onclick')) return;
+  });
+});
+</script>
+</body>
+</html>
